@@ -33,9 +33,13 @@ class SurfaceHandler:
         
         # Asteroid Surface. These images contain all of the frames for the
         # asteroid animation.
-        cls.large_asteroid = pg.image.load("resource/animated_asteroid.png")
-        cls.medium_asteroid = pg.image.load("resource/animated_asteroid.png")
-        cls.small_asteroid = pg.image.load("resource/animated_asteroid.png")
+        cls.large_asteroid = pg.image.load("resource/animated_asteroid.png").convert()
+        cls.medium_asteroid = pg.image.load("resource/animated_asteroid.png").convert()
+        cls.small_asteroid = pg.image.load("resource/animated_asteroid.png").convert()
+        
+        cls.large_asteroid.set_colorkey(pg.Color("black"))
+        cls.medium_asteroid.set_colorkey(pg.Color("black"))
+        cls.small_asteroid.set_colorkey(pg.Color("black"))
 
         # The medium asteroid surface is the whole animated image scaled down 2x.
         cls.medium_asteroid = pg.transform.scale(
@@ -51,9 +55,9 @@ class SurfaceHandler:
 
         # Explosion Surface. Same idea here as the asteroids, just that there are
         # more frames to the animation.
-        cls.large_explosion = pg.image.load("resource/animated_explosion.png")
-        cls.medium_explosion = pg.image.load("resource/animated_explosion.png")
-        cls.small_explosion = pg.image.load("resource/animated_explosion.png")
+        cls.large_explosion = pg.image.load("resource/animated_explosion.png").convert()
+        cls.medium_explosion = pg.image.load("resource/animated_explosion.png").convert()
+        cls.small_explosion = pg.image.load("resource/animated_explosion.png").convert()
 
         cls.medium_explosion = pg.transform.scale(
             cls.medium_explosion, 
