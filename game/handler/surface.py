@@ -1,3 +1,4 @@
+from turtle import color
 import pygame as pg
 
 from game.animated_sizes import AnimatedSize
@@ -25,23 +26,17 @@ class SurfaceHandler:
     def init(cls) -> None:
         # Ship Surface. The background of the image is magenta, so the colorkey function
         # removes it.
-        cls.ship = pg.image.load("resource/starfighter.png").convert()
-        cls.ship.set_colorkey(pg.Color("magenta"))
+        cls.ship = pg.image.load("resource/starfighter.png").convert_alpha()
         
         # Laser Surface. Since it is transparent, the background turns black whenever
         # converting it to a surface. This removes the black background.
-        cls.laser = pg.image.load("resource/laser.png").convert()
-        cls.laser.set_colorkey(pg.Color("black"))
+        cls.laser = pg.image.load("resource/laser.png").convert_alpha()
         
         # Asteroid Surface. These images contain all of the frames for the
         # asteroid animation.
-        cls.large_asteroid = pg.image.load("resource/animated_asteroid.png").convert()
-        cls.medium_asteroid = pg.image.load("resource/animated_asteroid.png").convert()
-        cls.small_asteroid = pg.image.load("resource/animated_asteroid.png").convert()
-        
-        cls.large_asteroid.set_colorkey(pg.Color("black"))
-        cls.medium_asteroid.set_colorkey(pg.Color("black"))
-        cls.small_asteroid.set_colorkey(pg.Color("black"))
+        cls.large_asteroid = pg.image.load("resource/animated_asteroid.png").convert_alpha()
+        cls.medium_asteroid = pg.image.load("resource/animated_asteroid.png").convert_alpha()
+        cls.small_asteroid = pg.image.load("resource/animated_asteroid.png").convert_alpha()
 
         # The medium asteroid surface is the whole animated image scaled down 2x.
         cls.medium_asteroid = pg.transform.scale(
@@ -57,9 +52,9 @@ class SurfaceHandler:
 
         # Explosion Surface. Same idea here as the asteroids, just that there are
         # more frames to the animation.
-        cls.large_explosion = pg.image.load("resource/animated_explosion.png").convert()
-        cls.medium_explosion = pg.image.load("resource/animated_explosion.png").convert()
-        cls.small_explosion = pg.image.load("resource/animated_explosion.png").convert()
+        cls.large_explosion = pg.image.load("resource/animated_explosion.png").convert_alpha()
+        cls.medium_explosion = pg.image.load("resource/animated_explosion.png").convert_alpha()
+        cls.small_explosion = pg.image.load("resource/animated_explosion.png").convert_alpha()
 
         cls.medium_explosion = pg.transform.scale(
             cls.medium_explosion, 

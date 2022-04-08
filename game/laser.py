@@ -1,7 +1,7 @@
 import pygame as pg
 import math
 
-import config
+import globals
 
 from game.handler.surface import SurfaceHandler
 from common.math import to_rad
@@ -75,7 +75,7 @@ class Laser:
              self.origin_rec.y - int(self.surf.get_height() / 2))
         )
 
-        if config.debug_mode:
+        if globals.debug_mode:
             pg.draw.rect(screen, self.hitbox_color, self.hitbox, 1)
     
     def __check_bounds(self, sw: int, sh: int):

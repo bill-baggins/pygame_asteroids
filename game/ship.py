@@ -1,7 +1,7 @@
 import pygame as pg
 import math
 
-import config
+import globals
 
 from game.handler.surface import SurfaceHandler
 from game.handler.audio import AudioHandler
@@ -59,7 +59,7 @@ class Ship:
         )
 
         # Where the ship surface gets drawn.
-        self.origin = pg.Vector2(config.screen_width // 2, config.screen_height // 2)
+        self.origin = pg.Vector2(globals.screen_width // 2, globals.screen_height // 2)
         self.surf = self.original_surf.copy()
 
         # The rectangle which the surface rotates around.
@@ -79,11 +79,11 @@ class Ship:
         self.hitbox_color = pg.Color("red")
 
         self.rotation = 0.0
-        self.delta_rotate = 150
+        self.delta_rotate = 125
         self.vel = 0
-        self.max_vel = 200
+        self.max_vel = 50
 
-        self.accelerate = 300
+        self.accelerate = 250
         self.deceleration_factor = 0.96
 
         # This is where input logic gets stored.
@@ -112,7 +112,7 @@ class Ship:
         self._screen_height = screen.get_height()
         self.timer = 0
         
-        self.health = 5
+        self.health = 1
         self.max_health = 10
 
     def get_key_down(self, key: int) -> None:
@@ -183,7 +183,7 @@ class Ship:
         self.__render_health(screen)
 
         # Draws outlines around the ship.
-        if config.debug_mode:
+        if globals.debug_mode:
             pg.draw.rect(screen, self.hitbox_color, self.hitbox, 1)
 
     """
@@ -211,7 +211,7 @@ class Ship:
             self.origin.y = -self.origin_rec.height
 
         # Removes the laser from the list.
-        for i, laser in sorted(enumerate(self.laser), reverse=True):
+        for i, laser in enumerate(self.laser):
             if laser.is_out_of_bounds:
                 self.laser.pop(i)
 

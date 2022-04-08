@@ -1,6 +1,6 @@
 import pygame as pg
 
-import config
+import globals
 from game.handler.surface import SurfaceHandler
 from game.animated_sizes import AnimatedSize
 from game.handler.audio import AudioHandler
@@ -103,7 +103,7 @@ class Asteroid:
             [self.origin_rec.x - (self.surf.get_width() >> 1),
              self.origin_rec.y - (self.surf.get_height() >> 1)]
         )
-        if config.debug_mode:
+        if globals.debug_mode:
             pg.draw.rect(screen, self.hitbox_color, self.hitbox, width=1)
 
     def __update_asteroid_animation_frame(self, dt: float):
