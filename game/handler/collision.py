@@ -23,15 +23,15 @@ class CollisionHandler:
                 #         ship.got_hit = True
                 #     break
                 if not ship.is_invincible:
-                    print("got hit")
                     ship.got_hit = True
+                    ship.health -= 1
                     break
     
     @classmethod
     def ship_laser_asteroid_collision(cls, screen: pg.Surface, ship: Ship, asteroid_list: 'list[Asteroid]'):
-        for i, laser in sorted(enumerate(ship.laser), reverse=True):
+        for i, laser in enumerate(ship.laser):
             laser_hit_something = False
-            for j, asteroid in sorted(enumerate(asteroid_list), reverse=True):
+            for j, asteroid in enumerate(asteroid_list):
                 if laser.hitbox.colliderect(asteroid.hitbox):
                     laser_hit_something = True
                     if asteroid.size > AnimatedSize.Small:
@@ -40,6 +40,7 @@ class CollisionHandler:
                         asteroid_list.append(Asteroid(screen, new_size, asteroid.hitbox.topright[0], asteroid.hitbox.topright[1]))
                         asteroid_list.append(Asteroid(screen, new_size, asteroid.hitbox.bottomleft[0], asteroid.hitbox.bottomleft[1]))
                         asteroid_list.append(Asteroid(screen, new_size, asteroid.hitbox.bottomright[0], asteroid.hitbox.bottomright[1]))
+                    AudioHandler.get_explosion_sound(asteroid.size).play()
                     asteroid_list.pop(j)
             if laser_hit_something:
                 ship.laser.pop(i)

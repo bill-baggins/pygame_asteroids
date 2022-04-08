@@ -29,7 +29,12 @@ class AudioHandler:
             AnimatedSize.Medium: cls.medium_explosion,
             AnimatedSize.Small: cls.small_explosion
         }
+        
+        cls.ship_fire.set_volume(0.2)
+        cls.small_explosion.set_volume(0.5)
+        cls.medium_explosion.set_volume(0.5)
+        cls.large_explosion.set_volume(0.5)
     
-
+    @classmethod
     def get_explosion_sound(cls, size: AnimatedSize) -> pg.mixer.Sound:
         return cls.explosion_dict.get(size)

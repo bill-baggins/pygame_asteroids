@@ -12,6 +12,35 @@ from random import randrange
 
 class Asteroid:
     
+    surf: pg.Surface
+    size: AnimatedSize
+
+    origin: pg.Vector2
+    origin_rec: pg.Rect
+    origin_rec_color: pg.Color
+
+    hitbox: pg.Rect
+    hitbox_color: pg.Color
+
+    vel: pg.Vector2
+
+    accelerate: float
+    deceleration_factor: float
+
+    __frame_counter: float
+    __frame_update_speed: float
+    __frame_counter_limit: float
+
+
+    __frame_width: int
+    __frame_height: int
+
+    __current_frame_x: int
+    __current_frame_y: int
+
+    __number_of_frames_x: int
+    __number_of_frames_y: int
+    
     def __init__(self, screen: pg.Surface, animated_size: AnimatedSize, x: int = None, y: int = None):
         self.original_surf = SurfaceHandler.get_asteroid_surf(animated_size)
         self.size = animated_size
@@ -123,32 +152,5 @@ class Asteroid:
 """
 Class attributes that I commented out:
 
-surf: pg.Surface
-size: AnimatedSize
 
-origin: pg.Vector2
-origin_rec: pg.Rect
-origin_rec_color: pg.Color
-
-hitbox: pg.Rect
-hitbox_color: pg.Color
-
-vel: pg.Vector2
-
-accelerate: float
-deceleration_factor: float
-
-__frame_counter: float
-__frame_update_speed: float
-__frame_counter_limit: float
-
-
-__frame_width: int
-__frame_height: int
-
-__current_frame_x: int
-__current_frame_y: int
-
-__number_of_frames_x: int
-__number_of_frames_y: int
 """

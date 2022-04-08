@@ -24,7 +24,7 @@ class Ship:
     delta_rotate: float
     vel: float
     max_vel: float
-    
+
     accelerate: float
     deceleration_factor: float
 
@@ -35,10 +35,17 @@ class Ship:
 
     _screen_width: int
     _screen_height: int
-    
+
     _got_hit_time_counter: int
     _got_hit_time_limit: int
-
+    _flicker: int
+    _flicker_index: bool
+    _flicker_alpha_values: 'tuple[int]'
+    
+    health: int
+    max_health: int
+    
+    
     """
     Public methods.
     """
@@ -97,10 +104,16 @@ class Ship:
         
         self._got_hit_time_counter = 0
         self._got_hit_time_limit = 2
+        self._flicker = 0
+        self._flicker_index = False
+        self._flicker_alpha_values = (100, 255)
 
         self._screen_width = screen.get_width()
         self._screen_height = screen.get_height()
         self.timer = 0
+        
+        self.health = 5
+        self.max_health = 10
 
     def get_key_down(self, key: int) -> None:
         maybe = self.key_set.get(key, None)
@@ -144,13 +157,11 @@ class Ship:
         if self.key_set[pg.K_d] or self.key_set[pg.K_RIGHT]:
             self.__rotate_right(dt)
 
-        # Shoot a laser. I have to do it like this otherwise you can spam lasers holding both z and spacebar.
-        if self.key_set[pg.K_SPACE]:
+        # Shoot a laser.
+        if self.key_set[pg.K_SPACE] or self.key_set[pg.K_z]:
             self.__shoot(dt)
             self.key_set[pg.K_SPACE] = False
-        elif self.key_set[pg.K_z]:
-            self.__shoot(dt)
-            self.key_set[pg.K_z] = False
+            # self.key_set[pg.K_z] = False
 
         # Decelerate the ship.
         if not self.key_set[pg.K_w] or not self.key_set[pg.K_UP]:
@@ -168,6 +179,8 @@ class Ship:
         # Draw the lasers that the ship shoots.
         for laser in self.laser:
             laser.draw(screen)
+        
+        self.__render_health(screen)
 
         # Draws outlines around the ship.
         if config.debug_mode:
@@ -202,7 +215,7 @@ class Ship:
             if laser.is_out_of_bounds:
                 self.laser.pop(i)
 
-    def __move_ship(self, dt: float) -> None:       
+    def __move_ship(self, dt: float):       
         # Move the ship. gross cosine and sine operations.
         self.origin.x -= math.cos(to_rad(self.rotation - 90.0)) * self.vel * dt
         self.origin.y -= math.sin(to_rad(self.rotation + 90.0)) * self.vel * dt
@@ -211,13 +224,15 @@ class Ship:
         self.hitbox.x = self.origin_rec.x - (self.origin_rec.width >> 1)
         self.hitbox.y = self.origin_rec.y - (self.origin_rec.height >> 1)
 
-    def __rotate_left(self, dt: float) -> None:
+    def __rotate_left(self, dt: float):
         self.rotation += self.delta_rotate * dt
         self.surf = pg.transform.rotate(self.original_surf, self.rotation)
+        self.surf.set_colorkey(pg.Color("magenta"))
 
-    def __rotate_right(self, dt: float) -> None:
+    def __rotate_right(self, dt: float):
         self.rotation -= self.delta_rotate * dt
         self.surf = pg.transform.rotate(self.original_surf, self.rotation)
+        self.surf.set_colorkey(pg.Color("magenta"))
 
     def __shoot(self, dt: float):
         laser = Laser(
@@ -229,8 +244,32 @@ class Ship:
         AudioHandler.ship_fire.play(maxtime=int(AudioHandler.ship_fire.get_length() - 200))
 
     def __invincible_time_period(self, dt: float):
+        # All this just to make the ship flicker during the invincible period. Sheesh...
         self._got_hit_time_counter += dt
         if self._got_hit_time_counter >= self._got_hit_time_limit:
             self._got_hit_time_counter = 0
-            # self.got_hit = False
             self.is_invincible = False
+            self._flicker = 0
+            self.original_surf.set_alpha(255)
+            self.surf.set_alpha(255)
+            self.surf.set_colorkey(pg.Color("magenta"))
+            self.original_surf.set_colorkey(pg.Color("magenta"))
+        else:
+            self._flicker += 1
+            if self._flicker >= 5:
+                self._flicker_index = not self._flicker_index
+                self.original_surf.set_alpha(self._flicker_alpha_values[int(self._flicker_index)])
+                self.surf.set_alpha(self._flicker_alpha_values[int(self._flicker_index)])
+                self.surf.set_colorkey(pg.Color("magenta"))
+                self.original_surf.set_colorkey(pg.Color("magenta"))
+                self._flicker = 0
+        
+    
+    def __render_health(self, screen: pg.Surface):
+        for i in range(self.health, -1, -1):
+            screen.blit(SurfaceHandler.heart_surf, [screen.get_width() - (i * 20), 0])
+
+
+"""
+    
+"""

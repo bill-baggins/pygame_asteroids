@@ -18,6 +18,8 @@ class SurfaceHandler:
 
     asteroid_surfs: 'dict[AnimatedSize, pg.Surface]'
     explosion_surfs: 'dict[AnimatedSize, pg.Surface]'
+    
+    heart_surf: pg.Surface
 
     @classmethod
     def init(cls) -> None:
@@ -80,6 +82,11 @@ class SurfaceHandler:
             AnimatedSize.Medium: cls.medium_explosion,
             AnimatedSize.Small: cls.small_explosion
         }
+        
+        cls.heart_surf = pg.image.load("resource/heart.png").convert()
+        cls.heart_surf.set_colorkey(pg.Color("black"))
+        cls.heart_surf = pg.transform.scale(cls.heart_surf, [20, 20])
+        
         cls.info()
 
     @classmethod
